@@ -34,13 +34,26 @@ void Player::handleEvent(SDL_Event& e) {
     }
 }
 
-void Player::move(float deltaTime) {
+void Player::move(float deltaTime, const Tilemap& tilemap) {
     // Apply gravity to vertical velocity
     velY += GRAVITY * deltaTime;
 
-    // Move the player
-    posX += velX * deltaTime;
-    posY += velY * deltaTime;
+    // Calculate new position
+    float newX = posX + velX * deltaTime;
+    float newY = posY + velY * deltaTime;
+
+    // Check for collisions
+    if (!checkCollision(newX, posY, tilemap)) {
+        posX = newX;
+    } else {
+        velX = 0; // Stop horizontal movement on collision
+    }
+    if (!checkCollision(posX, newY, tilemap)) {
+        posY = newY;
+    } else {
+        velY = 0; // Stop vertical movement on collision
+        isJumping = false; // Allow jumping again
+    }
 
     // Keep the player in bounds
     if (posX < 0) {
@@ -68,4 +81,9 @@ void Player::render(SDL_Renderer* renderer) {
     // Set the draw color to blue for the player
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
     SDL_RenderFillRect(renderer, &playerRect);
+}
+
+bool Player::checkCollision(float newX, float newY, const Tilemap& tilemap) const {
+    SDL_Rect newRect = { static_cast<int>(newX * PIXELS_PER_METER), static_cast<int>(newY * PIXELS_PER_METER), playerRect.w, playerRect.h };
+    return tilemap.checkCollision(newRect);
 }

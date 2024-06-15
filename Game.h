@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "InputHandler.h"
 #include "Player.h"
+#include "Tilemap.h"
 
 class Game {
 public:
@@ -18,6 +19,7 @@ private:
     Renderer renderer;
     InputHandler inputHandler;
     Player* player;
+    Tilemap tilemap;
     bool running;
 };
 

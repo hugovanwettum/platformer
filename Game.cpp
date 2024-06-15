@@ -16,7 +16,7 @@ bool Game::init(const char* title, int width, int height) {
     if (!renderer.loadFont("black_font.png")) {
         return false;
     }
-    player = new Player(width / 2, height / 2);
+    player = new Player(width / 10, 5 * height / 6);
     running = true;
     return true;
 }
@@ -42,7 +42,9 @@ void Game::run() {
 
         while (frameTime > 0.0) {
             float deltaTime = std::min(frameTime, dt);
-            player->move(deltaTime); // Integrate state
+            // Update player state
+            player->move(deltaTime, tilemap);
+
             frameTime -= deltaTime;
             t += deltaTime;
             //std::cout << deltaTime << "\n";
@@ -56,15 +58,6 @@ void Game::run() {
 
 
         int textWidth, textHeight;
-        /*
-        // Create deltaTime text texture and render it
-        SDL_Texture* deltaTimeTexture = renderer.printString(deltaTimeStr, 1.0f); // Adjust scale as needed
-        SDL_QueryTexture(deltaTimeTexture, NULL, NULL, &textWidth, &textHeight);
-        SDL_Rect deltaTimeRect = { 10, 10, textWidth, textHeight }; // Position it below the "Hello, world!" text
-        SDL_RenderCopy(renderer.getRenderer(), deltaTimeTexture, NULL, &deltaTimeRect);
-        SDL_DestroyTexture(deltaTimeTexture);
-        */
-
         // Create text texture and render it
         SDL_Texture* textTexture = renderer.printString("Hello, world!", 3.2f);
         SDL_QueryTexture(textTexture, NULL, NULL, &textWidth, &textHeight);
@@ -73,9 +66,8 @@ void Game::run() {
         SDL_DestroyTexture(textTexture);
 
 
-
-
-
+        //render tiles
+        tilemap.render(renderer.getRenderer());
         renderer.present();
 
         // Optional: Add a delay to limit the frame rate if needed
