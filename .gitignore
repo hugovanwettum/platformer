@@ -1,0 +1,22 @@
+# Ignore Code::Blocks workspace and layout files
+*.layout
+*.depend
+*.workspace
+
+# Ignore build directories
+bin/
+obj/
+build/
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Windows system files
+Thumbs.db
+
+# Ignore Code::Blocks backup files
+*.cbp.bak
