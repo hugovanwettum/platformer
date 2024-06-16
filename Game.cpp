@@ -70,7 +70,6 @@ void Game::run() {
         tilemap.render(renderer.getRenderer());
         renderer.present();
 
-        // Optional: Add a delay to limit the frame rate if needed
         SDL_Delay(1);
     }
 }

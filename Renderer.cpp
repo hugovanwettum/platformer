@@ -79,11 +79,12 @@ bool Renderer::loadFont(const std::string& path) {
         return false;
     }
 
-    // Assuming a grid of 16x6 characters in the bitmap font for the ASCII range 32-127
+    // Grid of characters, using ASCII order
     int columns = 16;
     int firstChar = 32; // ASCII value of ' '
     int totalChars = 96; // ASCII 32 to 127
 
+    // For all selected ASCII characters, create a map from the character to a location on the bitmap
     for (int i = 0; i < totalChars; ++i) {
         char c = static_cast<char>(firstChar + i);
         int x = (i % columns) * fontCharWidth;
@@ -123,13 +124,14 @@ SDL_Texture* Renderer::printString(const std::string& text, float scale) {
         std::cerr << "Failed to create texture for string! SDL Error: " << SDL_GetError() << std::endl;
         return nullptr;
     }
-
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND); // Ensure blending mode is set
+    // Enable transparency
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     SDL_SetRenderTarget(renderer, texture);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // RGBA with alpha = 0 (fully transparent)
     SDL_RenderClear(renderer);
 
+    // For all characters that were passed to this function, render a copy of a part of the character bitmap
     int x = 0;
     int y = 0;
     for (const char& c : text) {
